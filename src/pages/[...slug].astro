@@ -1,0 +1,36 @@
+---
+import { render } from 'astro:content';
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { getSortedDocsEntries, toDocsChapters, type DocsChapter, type DocsEntry } from '../lib/docs-content';
+
+export async function getStaticPaths() {
+	const entries = await getSortedDocsEntries();
+	const chapters = toDocsChapters(entries);
+
+	return entries.slice(1).map((entry, index) => ({
+		params: { slug: entry.id },
+		props: {
+			entry,
+			chapters,
+			current: chapters[index + 1],
+			prev: chapters[index],
+			next: chapters[index + 2],
+		},
+	}));
+}
+
+interface Props {
+	entry: DocsEntry;
+	chapters: DocsChapter[];
+	current: DocsChapter;
+	prev?: DocsChapter;
+	next?: DocsChapter;
+}
+
+const { entry, chapters, current, prev, next } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<DocsLayout chapters={chapters} current={current} prev={prev} next={next}>
+	<Content />
+</DocsLayout>

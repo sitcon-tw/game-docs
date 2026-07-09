@@ -1,0 +1,99 @@
+---
+import DocsInspector from '../components/docs/DocsInspector.svelte';
+import ChapterNav from '../components/docs/ChapterNav.astro';
+import DocsSidebar from '../components/docs/DocsSidebar.svelte';
+import DocsSearch from '../components/docs/DocsSearch.astro';
+import '../styles/docs.css';
+
+interface DocsChapter {
+	id: string;
+	eyebrow: string;
+	title: string;
+	duration: string;
+	level: string;
+	tags: string[];
+	summary: string;
+	goals: string[];
+	checklist: string[];
+	href: string;
+}
+
+interface Props {
+	chapters: DocsChapter[];
+	current: DocsChapter;
+	prev?: DocsChapter;
+	next?: DocsChapter;
+}
+
+const { chapters, current, prev, next } = Astro.props;
+const pageTitle = `${current.title} | SITCON Camp 教學文件`;
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{pageTitle}</title>
+		<meta name="description" content={current.summary} />
+	</head>
+	<body>
+		<script is:inline>
+			try {
+				if (localStorage.getItem('camp-docs:sidebar') === 'collapsed') {
+					document.body.classList.add('sidebar-collapsed');
+				}
+			} catch {}
+		</script>
+		<a class="skip-link" href="#lessonContent">跳到正文</a>
+		<button
+			class="icon-button floating-menu"
+			id="openSidebar"
+			type="button"
+			aria-label="展開章節目錄"
+		>
+			<span class="ui-icon i-lucide-menu" aria-hidden="true"></span>
+		</button>
+
+		<div class="app-shell">
+			<DocsSidebar client:load chapters={chapters} currentId={current.id}>
+				<DocsSearch slot="search" />
+			</DocsSidebar>
+
+			<main class="reader" id="main">
+				<header class="lesson-hero" data-pagefind-body>
+					<div class="breadcrumb">
+						<span>SITCON Camp</span>
+						<span>/</span>
+						<span>{current.eyebrow}</span>
+					</div>
+					<h1 class="lesson-title">{current.title}</h1>
+					<p class="lesson-summary">{current.summary}</p>
+					<div class="hero-meta">
+						<span class="pill"><strong>時間</strong>{current.duration}</span>
+						<span class="pill"><strong>難度</strong>{current.level}</span>
+						{current.tags.map((tag) => <span class="pill">{tag}</span>)}
+					</div>
+				</header>
+
+				<article class="article-card" id="lessonContent" tabindex="-1" data-pagefind-body>
+					<slot />
+				</article>
+
+				<ChapterNav prev={prev} next={next} />
+			</main>
+
+			<DocsInspector
+				client:load
+				chapterId={current.id}
+				goals={current.goals}
+				checklist={current.checklist}
+			/>
+		</div>
+
+		<div class="scrim" id="scrim"></div>
+	</body>
+</html>

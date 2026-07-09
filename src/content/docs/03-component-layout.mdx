@@ -1,0 +1,45 @@
+---
+order: 3
+eyebrow: "03 元件"
+title: "把畫面拆成可以維護的區塊"
+duration: "16 分鐘"
+level: "核心"
+tags: ["元件","版面","props"]
+summary: "當畫面變大，最重要的是不要把所有東西塞在同一個檔案。先拆出重複使用的元件，再用資料餵給它。"
+goals: ["辨認可重複的畫面區塊","理解 props 的用途","能用資料產生列表"]
+checklist: ["我能找出章節按鈕是重複元件","我知道 props 是父層傳給子層的資料","我能把三個章節用陣列渲染出來"]
+---
+import Callout from '../../components/docs/Callout.astro';
+import CodeBlock from '../../components/docs/CodeBlock.astro';
+
+## 先找重複，再抽元件
+
+左側章節列表每一列都有編號、標題、時間與標籤。這就是適合抽成元件的訊號。元件不是為了看起來厲害，而是為了讓重複規則只寫一次。
+
+當課程章節增加時，你只要修改資料，不需要複製貼上整段 HTML。
+
+<CodeBlock title="章節資料渲染">
+
+```svelte
+<script>
+  // chapters：用陣列保存所有章節資料，之後可以從檔案或 API 讀入。
+  const chapters = [
+    { title: '開發環境', minutes: 12 },
+    { title: 'Svelte 狀態', minutes: 18 },
+    { title: 'Prompt Injection 防護', minutes: 22 }
+  ];
+</script>
+
+{#each chapters as chapter}
+  <!-- ChapterItem：每筆資料都交給同一個元件畫出來。 -->
+  <ChapterItem title={chapter.title} minutes={chapter.minutes} />
+{/each}
+```
+
+</CodeBlock>
+
+## 拆元件時保留語意
+
+元件名稱要描述它在產品裡的責任，例如 ChapterItem、LessonHeader、ProgressCard。不要用 Box1、Thing、Content 這種只有你當下懂的名字。
+
+好的元件命名會讓隊友不用打開檔案，也能大概知道它負責哪一塊畫面。

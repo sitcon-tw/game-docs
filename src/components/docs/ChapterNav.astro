@@ -1,0 +1,42 @@
+---
+interface ChapterLink {
+	href: string;
+	title: string;
+}
+
+interface Props {
+	prev?: ChapterLink;
+	next?: ChapterLink;
+}
+
+const { prev, next } = Astro.props;
+---
+
+<div class="lesson-actions" aria-label="章節切換">
+	{
+		prev ? (
+			<a class="nav-card" href={prev.href}>
+				<span class="nav-kicker">上一章</span>
+				<span class="nav-title">{prev.title}</span>
+			</a>
+		) : (
+			<span class="nav-card" aria-disabled="true">
+				<span class="nav-kicker">上一章</span>
+				<span class="nav-title">沒有更多章節</span>
+			</span>
+		)
+	}
+	{
+		next ? (
+			<a class="nav-card" href={next.href}>
+				<span class="nav-kicker">下一章</span>
+				<span class="nav-title">{next.title}</span>
+			</a>
+		) : (
+			<span class="nav-card" aria-disabled="true">
+				<span class="nav-kicker">下一章</span>
+				<span class="nav-title">沒有更多章節</span>
+			</span>
+		)
+	}
+</div>

@@ -1,0 +1,14 @@
+---
+import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
+---
+
+<div class="docs-search" data-pagefind-ignore="all" aria-label="搜尋文件">
+	<PagefindConfig lang="zh-tw" excerpt-length="24" />
+	<pagefind-searchbox
+		placeholder="搜尋全文或章節"
+		debounce="120"
+		max-results="8"
+		show-sub-results
+		shortcut="/"
+	></pagefind-searchbox>
+</div>

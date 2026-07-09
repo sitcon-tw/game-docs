@@ -1,0 +1,43 @@
+---
+order: 4
+eyebrow: "04 AI 互動"
+title: "把 Dify 對話嵌進作品"
+duration: "20 分鐘"
+level: "應用"
+tags: ["iframe","Dify","整合"]
+summary: "嵌入外部 AI 服務時，前端要負責清楚的容器、載入狀態與安全邊界。使用者不需要知道 iframe 是什麼，但你要知道它的限制。"
+goals: ["理解 iframe 的用途","能設定標題與 sandbox","知道外部服務載入失敗時要怎麼顯示"]
+checklist: ["我有替 iframe 加上 title","我知道 sandbox 是限制外部頁面能力","我準備了載入失敗時的說明"]
+---
+import Callout from '../../components/docs/Callout.astro';
+import CodeBlock from '../../components/docs/CodeBlock.astro';
+
+## iframe 是一個受控的視窗
+
+iframe 可以把另一個網站放進你的頁面裡。對 Dify 這類服務來說，它適合快速展示 AI 對話，但也代表內容不是你的前端直接控制。
+
+因此你要替它安排清楚的版面、替使用者說明用途，並限制它能做的事情。
+
+<CodeBlock title="Dify 嵌入區塊">
+
+```html
+<section class="ai-panel">
+  <h2>AI 助教</h2>
+  <iframe
+    src="https://你的-dify-app-url"
+    title="AI 助教對話視窗"
+    sandbox="allow-scripts allow-same-origin allow-forms"
+    loading="lazy">
+  </iframe>
+</section>
+```
+
+</CodeBlock>
+
+## 外部服務需要備援文字
+
+網路不穩、服務維護、網址填錯時，iframe 可能空白。你的頁面應該告訴使用者下一步，而不是留下一個不知道發生什麼事的白框。
+
+最簡單的做法是放一段短說明與重新整理按鈕；進階做法是監聽載入狀態，必要時顯示備援連結。
+
+<Callout>如果要讓學生理解整合流程，請把 Dify app 的用途寫在 iframe 上方，不要只放一個聊天框。</Callout>

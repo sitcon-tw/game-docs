@@ -1,0 +1,43 @@
+---
+order: 5
+eyebrow: "05 安全"
+title: "認識 Prompt Injection 防護"
+duration: "22 分鐘"
+level: "重要"
+tags: ["AI 安全","輸入驗證","防護"]
+summary: "Prompt injection 是把惡意指令混進一般輸入，試圖讓 AI 忽略原本規則。前端不能單獨解決所有問題，但可以讓風險變得可見。"
+goals: ["理解惡意輸入與正常輸入的差異","知道前端可以做哪些提醒","能把使用者輸入視為資料而不是指令"]
+checklist: ["我能解釋什麼是 prompt injection","我知道不能把使用者輸入直接當系統規則","我能在 UI 裡標示高風險輸入"]
+---
+import Callout from '../../components/docs/Callout.astro';
+import CodeBlock from '../../components/docs/CodeBlock.astro';
+
+## 把使用者輸入當資料，不當命令
+
+一段文字看起來像指令，不代表系統就應該服從它。使用者輸入應該被包在明確欄位中，交給後端或 AI 服務依照既定規則處理。
+
+前端的角色是讓輸入流程清楚：提示使用者不要貼入秘密、標示高風險內容、在送出前確認資料用途。
+
+<CodeBlock title="送出前的風險提示">
+
+```svelte
+<script>
+  // riskyWords：示範用關鍵字，正式產品應由後端與安全規則共同判斷。
+  const riskyWords = ['忽略前面的規則', 'ignore previous instructions', '系統提示'];
+
+  // hasRisk：檢查使用者輸入是否包含高風險語句。
+  function hasRisk(message) {
+    return riskyWords.some((word) => message.includes(word));
+  }
+</script>
+```
+
+</CodeBlock>
+
+## 前端提醒不是完整防線
+
+前端可以做提醒、分類、確認與可視化，但真正的權限控管、系統提示保護與資料存取限制必須在後端或 AI 工作流裡完成。
+
+教學時可以讓學生先看到前端偵測，再補上觀念：安全不是一個 if 判斷，而是一整條資料流的設計。
+
+<Callout>教學重點：不要讓學生以為關鍵字過濾就是安全。它只是讓風險被看見的第一層。</Callout>
