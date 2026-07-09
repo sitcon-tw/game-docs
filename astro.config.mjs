@@ -11,4 +11,9 @@ import svelte from '@astrojs/svelte';
 export default defineConfig({
 	site: 'https://example.com',
 	integrations: [mdx(), svelte(), UnoCSS(), pagefind()],
+	vite: {
+		server: {
+			allowedHosts: ['docs.sitcon.party'],
+		},
+	},
 });
