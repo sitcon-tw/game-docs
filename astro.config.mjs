@@ -9,11 +9,11 @@ import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://docs.sitcon.party',
 	integrations: [mdx(), svelte(), UnoCSS(), pagefind()],
-	vite: {
-		server: {
-			allowedHosts: ['docs.sitcon.party'],
-		},
+	server: {
+		host: true,
+		port: 4321,
+		allowedHosts: ['docs.sitcon.party'],
 	},
 });
