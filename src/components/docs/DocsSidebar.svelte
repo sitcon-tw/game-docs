@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import {
 		readCompleted,
 		readSidebarState,
@@ -21,9 +22,10 @@
 	interface Props {
 		chapters: Chapter[];
 		currentId: string;
+		search?: Snippet;
 	}
 
-	let { chapters, currentId }: Props = $props();
+	let { chapters, currentId, search }: Props = $props();
 	let completed = $state<string[]>([]);
 	let collapsed = $state(false);
 	let sidebarOpen = $state(false);
@@ -110,7 +112,7 @@
 	</div>
 
 	<div class="sidebar-search">
-		<slot name="search" />
+		{@render search?.()}
 	</div>
 
 	<nav class="chapter-list" aria-label="所有章節">
