@@ -453,6 +453,47 @@ button {
   margin-top: 8px;
 }
 
+.article-card table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 26px 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-spacing: 0;
+  border-radius: 16px;
+  background: color-mix(in oklch, var(--surface) 96%, white);
+  font-size: 15px;
+}
+
+.article-card th,
+.article-card td {
+  min-width: 9rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.article-card th {
+  background: var(--bg);
+  color: var(--fg);
+  font-weight: 800;
+}
+
+.article-card td {
+  color: color-mix(in oklch, var(--fg) 78%, var(--muted));
+}
+
+.article-card tr > :last-child {
+  border-right: 0;
+}
+
+.article-card tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
 .callout {
   border-color: var(--border);
   background: var(--bg);
