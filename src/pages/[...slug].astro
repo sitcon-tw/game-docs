@@ -3,6 +3,8 @@ import { render } from 'astro:content';
 import DocsLayout from '../layouts/DocsLayout.astro';
 import { getSortedDocsEntries, toDocsChapters, type DocsChapter, type DocsEntry } from '../lib/docs-content';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
 	const entries = await getSortedDocsEntries();
 	const chapters = toDocsChapters(entries);

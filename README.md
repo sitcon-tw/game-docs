@@ -9,6 +9,7 @@ SITCON Camp 2026 前端教學文件站。內容以章節式 MDX 文件呈現，�
 - MDX content collections
 - UnoCSS
 - Bun
+- Node.js standalone hosting
 - Pagefind
 
 ## 環境需求
@@ -16,7 +17,7 @@ SITCON Camp 2026 前端教學文件站。內容以章節式 MDX 文件呈現，�
 - Node.js `>=22.12.0`
 - Bun
 
-如果不想在主機安裝依賴，也可以直接使用 Docker Compose 開發。
+如果不想在主機安裝依賴，也可以直接使用 Docker Compose 建置並啟動 production server。
 
 ## 本機開發
 
@@ -47,9 +48,9 @@ bun astro dev logs
 bun astro dev stop
 ```
 
-## Docker Compose 開發
+## Docker Compose 部署
 
-使用 Compose 啟動文件站：
+使用 Compose 建置映像並啟動文件站：
 
 ```sh
 docker compose up
@@ -67,7 +68,7 @@ docker compose up -d
 docker compose down
 ```
 
-容器會自動執行 `bun install --frozen-lockfile`，並以 `0.0.0.0:4321` 啟動 Astro dev server。主機端預設可從 `http://localhost:4321` 開啟。
+容器會在 build 階段執行 `bun install --frozen-lockfile` 與 `bun run build`，runtime 階段使用 Node.js 執行 `./dist/server/entry.mjs`，並監聽 `0.0.0.0:4321`。主機端預設可從 `http://localhost:4321` 開啟，正式網域允許 `docs.sitcon.party`。
 
 若要改主機端 port：
 
@@ -75,7 +76,7 @@ docker compose down
 DOCS_PORT=5173 docker compose up
 ```
 
-容器內的 `node_modules` 使用 Docker named volume，不會覆蓋主機端的 `node_modules`。
+Docker image 會包含 production runtime 需要的 `node_modules`，不會掛載或覆蓋主機端的 `node_modules`。
 
 ## 常用指令
 
@@ -83,10 +84,10 @@ DOCS_PORT=5173 docker compose up
 | --- | --- |
 | `bun install` | 安裝依賴 |
 | `bun run dev` | 啟動本機開發伺服器 |
-| `bun run build` | 建置靜態網站到 `dist/` |
+| `bun run build` | 建置 production 輸出到 `dist/` |
 | `bun run preview` | 預覽建置結果 |
 | `bun astro ...` | 執行 Astro CLI |
-| `docker compose up` | 用 Docker Compose 啟動開發環境 |
+| `docker compose up` | 用 Docker Compose 建置並啟動 production server |
 
 ## 專案結構
 
@@ -99,7 +100,9 @@ DOCS_PORT=5173 docker compose up
 │   ├── lib/                  # 文件資料與進度工具
 │   ├── pages/                # Astro 路由
 │   └── styles/               # 全站樣式
+├── .dockerignore
 ├── astro.config.mjs
+├── Dockerfile
 ├── docker-compose.yml
 ├── package.json
 └── uno.config.ts
@@ -131,4 +134,4 @@ checklist: ["完成檢查"]
 bun run build
 ```
 
-建置輸出在 `dist/`。本專案啟用了 Pagefind，建置時會同步產生搜尋索引。
+建置輸出在 `dist/`，包含 Node.js server entry 與靜態 client assets。本專案啟用了 Pagefind，建置時會同步產生搜尋索引。
